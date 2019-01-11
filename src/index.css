@@ -8,6 +8,108 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.container {
+  width: 100%;
+}
+
+.shelf {
+  width: 80%;
+  margin: 100px auto;
+  min-height: 100px;
+}
+
+.item {
+  box-sizing: border-box;
+  padding:4px;
+  display:inline-block;
+  min-height:300px;
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.item > div:hover {
+  border:1px solid #eee;
+}
+
+.item > div {
+  position:relative;
+  border:1px solid rgba(0,0,0,0);
+}
+
+.item img {
+  width:95%;
+  padding:2.5%;
+}
+.item h5 {
+  margin:0px 10%;
+  width:80%;
+}
+
+.item .shipping {
+  position:absolute;
+  top:0px;
+  right:0px;
+  z-index:2;
+  color:rgba(255,255,255,.8);
+  font-size:.7em;
+  background:black;
+  padding:3px;
+  font-weight:bold;
+}
+
+.item .bignum {
+  font-size:1.5em;
+  margin-left:4px;
+}
+
+.item .addtocart {
+  position:absolute;
+  top:0px;
+  left:0px;
+  height:100%;
+  width:100%;
+  z-index:2;
+  opacity:0;
+  background-color:rgba(0,0,0,.05);
+}
+
+.item .addtocart:hover {
+  opacity:1;
+}
+
+.item .addtocart button {
+  border:none;
+  width:60%;
+  height:40px;
+  background:black;
+  color:white;
+  font-size:1.3em;
+  font-weight:bold;
+  margin-top:125%;
+  cursor:pointer;
+}
+
+@media only screen and (min-width:1000px) {
+  .item {
+    width: 25%;
+  }
+}
+@media only screen and (min-width:750px) and (max-width:1000px) {
+  .item {
+    width:33%;
+  }
+}
+@media only screen and (min-width:500px) and (max-width:750px) {
+  .item {
+    width:50%;
+  }
+}
+@media only screen and (max-width:500px) {
+  .item {
+    width:100%;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
