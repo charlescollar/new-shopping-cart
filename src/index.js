@@ -48,6 +48,24 @@ class ShoppingCartApp extends React.Component {
     return (
       <div class="container">
         <Shelf products={this.props.data.products}/>
+        <Cart />
+      </div>
+    );
+  }
+}
+
+class Cart extends React.Component {
+  state = {
+    isOpen: false
+  };
+  toggleCart = (value) => {
+    this.setState({ isOpen: value });
+  };
+  render() {
+    return (
+      <div class={this.state.isOpen?"cart cart-open":"cart"}>
+        <div class="cart-button"
+             onClick={() => this.toggleCart(!this.state.isOpen)}>&#9776;</div>
       </div>
     );
   }
