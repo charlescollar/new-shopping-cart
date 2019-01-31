@@ -92,11 +92,18 @@ body {
 .cart {
   background:black;
   height:100vh;
+  max-height:100vh;
   position:fixed;
   top:0px;
   z-index:3;
   -webkit-transition: right .2s; /* Safari */
   transition: right .2s;
+  color:white;
+}
+.cart-items {
+  height:calc(100vh - 100px);
+  overflow:scroll;
+  width:95%;
 }
 .cart-button {
   position:absolute;
@@ -104,7 +111,7 @@ body {
   width:50px;
   top:0px;
   left:-50px;
-  z-index:3;
+  z-index:5;
   background:black;
   font-family:sans-serif;
   text-align:center;
@@ -193,6 +200,17 @@ body {
   position:absolute;
   bottom:5px;
   right:5px;
+}
+.cart h2 {
+  text-align:center;
+  height:30px;
+}
+.cart-summary {
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  font-size:14pt;
+  z-index:2;
 }
 
 code {

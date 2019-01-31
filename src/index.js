@@ -14,17 +14,17 @@ class Item extends React.Component {
   }
   render() {
     return (
-      <div class="item">
+      <div className="item">
         <div>
-          <span class="shipping">Free Shipping</span>
-          <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} />
+          <span className="shipping">Free Shipping</span>
+          <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} alt=""/>
           <h5>{this.props.product.title}</h5>
-          <span class="price">
-            <span class="currency">{this.props.product.currencyFormat}</span>
-            <span class="bignum">{Math.floor(this.props.product.price)}</span>
-            <span class="smallnum">{(this.props.product.price % 1).toFixed(2).replace(/^0+/, '')}</span>
+          <span className="price">
+            <span className="currency">{this.props.product.currencyFormat}</span>
+            <span className="bignum">{Math.floor(this.props.product.price)}</span>
+            <span className="smallnum">{(this.props.product.price % 1).toFixed(2).replace(/^0+/, '')}</span>
           </span>
-          <div class="addtocart">
+          <div className="addtocart">
             <button
               onClick={() => this.handleAddToCart({
                 id: this.props.product.id,
@@ -47,9 +47,6 @@ class Item extends React.Component {
 }
 
 class Shelf extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     const rows=[];
     
@@ -58,11 +55,12 @@ class Shelf extends React.Component {
         <Item
           product={product}
           onAddToCart={this.props.onAddItemsToCart}
+          key={product.id}
         />
       );
     });
     return (
-      <div class="shelf">
+      <div className="shelf">
         {rows}
       </div>
     );
@@ -81,7 +79,7 @@ class ShoppingCartApp extends React.Component {
     let tempCart = this.state.shoppingCart;
     let newItem = true;
     for (let i = 0; i < tempCart.length; i++) {
-      if (item.id == tempCart[i].id) {
+      if (item.id === tempCart[i].id) {
         newItem = false;
         tempCart[i].quantity++;
         this.setState({
@@ -98,7 +96,7 @@ class ShoppingCartApp extends React.Component {
   }
   render() {
     return (
-      <div class="container">
+      <div className="container">
         <Shelf
           products={this.props.data.products}
           onAddItemsToCart={this.handleAddToCart}
@@ -114,17 +112,17 @@ class ShoppingCartApp extends React.Component {
 class CartItem extends React.Component {
   render() {
     return (
-      <div class="cart-item">
+      <div className="cart-item">
         <div>
-          <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} />
-          <div class="cart-details">
+          <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} alt="" />
+          <div className="cart-details">
             <h5>{this.props.product.title}</h5>
-            <span class="cart-desc">{this.props.product.style}</span>
-            <span class="cart-price">
-              <span class="cart-currency">{this.props.product.currencyFormat}</span>
-              <span class="cart-bignum">{Math.floor(this.props.product.price)}</span>
-              <span class="cart-smallnum">{(this.props.product.price % 1).toFixed(2).replace(/^0+/, '')}</span>
-              <span class="cart-quantity">x{(this.props.product.quantity)}</span>
+            <span className="cart-desc">{this.props.product.style}</span>
+            <span className="cart-price">
+              <span className="cart-currency">{this.props.product.currencyFormat}</span>
+              <span className="cart-bignum">{Math.floor(this.props.product.price)}</span>
+              <span className="cart-smallnum">{(this.props.product.price % 1).toFixed(2).replace(/^0+/, '')}</span>
+              <span className="cart-quantity">x{(this.props.product.quantity)}</span>
             </span>
           </div>
         </div>
@@ -142,17 +140,26 @@ class Cart extends React.Component {
   };
   render() {
     const rows=[];
+    let totalprice = 0;
     this.props.cart.forEach((product) => {
       rows.push(
         <CartItem
           product={product}
         />
       );
+      totalprice += product.price * product.quantity;
     });
     return (
-      <div class={this.state.isOpen?"cart cart-open":"cart"}>{rows}
-        <div class="cart-button"
+      <div className={this.state.isOpen?"cart cart-open":"cart"} >
+        <div className="cart-button"
              onClick={() => this.toggleCart(!this.state.isOpen)}>&#9776;</div>
+        <h2>Cart</h2>
+        <div className="cart-items">
+          {rows}
+        </div>
+        <div className="cart-summary">
+          <span className="total-price">Total: {(totalprice).toFixed(2).replace(/^0+/, '')}</span>
+        </div>
       </div>
     );
   }
