@@ -212,6 +212,23 @@ body {
   font-size:14pt;
   z-index:2;
 }
+.cart-remove {
+  position:absolute;
+  top:3px;
+  right:3px;
+  background:black;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  display:block;
+  height:auto;
+  width:auto;
+  line-height:1;
+  padding:4px;
+}
+.cart-remove:hover {
+  background:#333;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

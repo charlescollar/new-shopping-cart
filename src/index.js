@@ -74,6 +74,7 @@ class ShoppingCartApp extends React.Component {
       shoppingCart: []
     };
     this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemoveFromCart = this.handleRemoveFromCart.bind(this);
   }
   handleAddToCart(item) {
     let tempCart = this.state.shoppingCart;
@@ -93,6 +94,23 @@ class ShoppingCartApp extends React.Component {
         shoppingCart: tempCart
       });
     }
+  };
+  handleRemoveFromCart(item) {
+    let tempCart = this.state.shoppingCart;
+    for (let i = 0; i < tempCart.length; i++) {
+      if (item.id === tempCart[i].id) {
+        if (tempCart[i].quantity > 1) { // Reduce quantity
+          tempCart[i].quantity--;
+        }
+        else { // Otherwise remove item
+          tempCart.splice(i,1);
+        }
+        this.setState({
+          shoppingCart: tempCart
+        });
+        break;
+      }
+    }
   }
   render() {
     return (
@@ -103,6 +121,7 @@ class ShoppingCartApp extends React.Component {
         />
         <Cart
           cart={this.state.shoppingCart}
+          onRemoveItem={this.handleRemoveFromCart}
         />
       </div>
     );
@@ -117,6 +136,7 @@ class CartItem extends React.Component {
           <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} alt="" />
           <div className="cart-details">
             <h5>{this.props.product.title}</h5>
+            <span className="cart-remove" onClick={() => {this.props.onRemoveItem(this.props.product)}}>X</span>
             <span className="cart-desc">{this.props.product.style}</span>
             <span className="cart-price">
               <span className="cart-currency">{this.props.product.currencyFormat}</span>
@@ -132,6 +152,10 @@ class CartItem extends React.Component {
 }
 
 class Cart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.setState({isOpen:false});
+  };
   state = {
     isOpen: false
   };
@@ -144,7 +168,9 @@ class Cart extends React.Component {
     this.props.cart.forEach((product) => {
       rows.push(
         <CartItem
+          onRemoveItem={this.props.onRemoveItem}
           product={product}
+          key={product.id}
         />
       );
       totalprice += product.price * product.quantity;
