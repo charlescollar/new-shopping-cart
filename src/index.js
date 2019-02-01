@@ -118,13 +118,44 @@ class Shelf extends React.Component {
     const rows=[];
     
     this.props.products.forEach((product) => {
-      rows.push(
-        <Item
-          product={product}
-          onAddToCart={this.props.onAddItemsToCart}
-          key={product.id}
-        />
-      );
+      const sizes = this.props.selectedSizes;
+      let show = !(sizes.XS || sizes.S || sizes.M || sizes.ML || sizes.L || sizes.XL || sizes.XXL);
+      // Showing all sizes if none are selected
+      
+      product.availableSizes.forEach((size) => {
+        switch(size) {
+          case "XS":
+            show |= sizes.XS;
+            break;
+          case "S":
+            show |= sizes.S;
+            break;
+          case "M":
+            show |= sizes.M;
+            break;
+          case "ML":
+            show |= sizes.ML;
+            break;
+          case "L":
+            show |= sizes.L;
+            break;
+          case "XL":
+            show |= sizes.XL;
+            break;
+          case "XXL":
+            show |= sizes.XXL;
+            break;
+        }
+      });
+      if (show) {
+        rows.push(
+          <Item
+            product={product}
+            onAddToCart={this.props.onAddItemsToCart}
+            key={product.id}
+          />
+        );
+      }
     });
     return (
       <div className="shelf">
@@ -134,56 +165,115 @@ class Shelf extends React.Component {
   }
 }
 
+class Filters extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleFilterSize = this.handleFilterSize.bind(this);
+  }
+  handleFilterSize(size,value) {
+    this.props.onFilterSize(size,value);
+  }
+  render() {
+    return (
+      <div className="filter">Filter By Sizes:
+        <span className={this.props.selectedSizes.XS?"selected":"unselected"} onClick={()=>{this.handleFilterSize("XS",!this.props.selectedSizes.XS);}}>XS</span>
+        <span className={this.props.selectedSizes.S?"selected":"unselected"} onClick={()=>{this.handleFilterSize("S",!this.props.selectedSizes.S);}}>S</span>
+        <span className={this.props.selectedSizes.M?"selected":"unselected"} onClick={()=>{this.handleFilterSize("M",!this.props.selectedSizes.M);}}>M</span>
+        <span className={this.props.selectedSizes.ML?"selected":"unselected"} onClick={()=>{this.handleFilterSize("ML",!this.props.selectedSizes.ML);}}>ML</span>
+        <span className={this.props.selectedSizes.L?"selected":"unselected"} onClick={()=>{this.handleFilterSize("L",!this.props.selectedSizes.L);}}>L</span>
+        <span className={this.props.selectedSizes.XL?"selected":"unselected"} onClick={()=>{this.handleFilterSize("XL",!this.props.selectedSizes.XL);}}>XL</span>
+        <span className={this.props.selectedSizes.XXL?"selected":"unselected"} onClick={()=>{this.handleFilterSize("XXL",!this.props.selectedSizes.XXL);}}>XXL</span>
+      </div>
+    );
+  }
+}
+
 class ShoppingCartApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shoppingCart: []
+      shoppingCart: [],
+      showingSizes: {
+        "XS":false,
+        "S":false,
+        "M":false,
+        "ML":false,
+        "L":false,
+        "XL":false,
+        "XXL":false
+      }
     };
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleRemoveFromCart = this.handleRemoveFromCart.bind(this);
+    this.handleFilterSize = this.handleFilterSize.bind(this);
   }
   handleAddToCart(item) {
-    let tempCart = this.state.shoppingCart;
+    let tempState = this.state;
     let newItem = true;
-    for (let i = 0; i < tempCart.length; i++) {
-      if (item.id === tempCart[i].id && tempCart[i].size === item.size) {
+    for (let i = 0; i < tempState.shoppingCart.length; i++) {
+      if (item.id === tempState.shoppingCart[i].id && tempState.shoppingCart[i].size === item.size) {
         newItem = false;
-        tempCart[i].quantity++;
-        this.setState({
-          shoppingCart: tempCart
-        });
+        tempState.shoppingCart[i].quantity++;
+        this.setState(tempState);
       }
     }
     if (newItem) {
-      tempCart.push(item);
-      this.setState({
-        shoppingCart: tempCart
-      });
+      tempState.shoppingCart.push(item);
+      this.setState(tempState);
     }
   };
   handleRemoveFromCart(item) {
-    let tempCart = this.state.shoppingCart;
-    for (let i = 0; i < tempCart.length; i++) { // Find item
-      if (item.id === tempCart[i].id && item.size === tempCart[i].size) {
-        if (tempCart[i].quantity > 1) { // Reduce quantity
-          tempCart[i].quantity--;
+    let tempState = this.state;
+    for (let i = 0; i < tempState.shoppingCart.length; i++) { // Find item
+      if (item.id === tempState.shoppingCart[i].id && item.size === tempState.shoppingCart[i].size) {
+        if (tempState.shoppingCart[i].quantity > 1) { // Reduce quantity
+          tempState.shoppingCart[i].quantity--;
         }
         else { // Otherwise remove item
-          tempCart.splice(i,1);
+          tempState.shoppingCart.splice(i,1);
         }
-        this.setState({
-          shoppingCart: tempCart
-        });
+        this.setState(tempState);
         break;
       }
     }
   }
+  handleFilterSize(size,value) {
+    let tempState = this.state;
+    switch (size) {
+      case "XS":
+        tempState.showingSizes.XS = value;
+        break;
+      case "S":
+        tempState.showingSizes.S = value;
+        break;
+      case "M":
+        tempState.showingSizes.M = value;
+        break;
+      case "ML":
+        tempState.showingSizes.ML = value;
+        break;
+      case "L":
+        tempState.showingSizes.L = value;
+        break;
+      case "XL":
+        tempState.showingSizes.XL = value;
+        break;
+      case "XXL":
+        tempState.showingSizes.XXL = value;
+        break;
+    }
+    this.setState(tempState);
+  }
   render() {
     return (
       <div className="container">
+        <Filters 
+          onFilterSize={this.handleFilterSize}
+          selectedSizes={this.state.showingSizes}
+        />
         <Shelf
           products={this.props.data.products}
+          selectedSizes={this.state.showingSizes}
           onAddItemsToCart={this.handleAddToCart}
         />
         <Cart
