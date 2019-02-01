@@ -4,6 +4,42 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import data from './static/data/products.json';
 
+class AddButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+  }
+  handleAddToCart() {
+    this.props.onAddToCart({ 
+      id: this.props.product.id,
+      sku: this.props.product.sku,
+	  title: this.props.product.title,
+	  description: this.props.product.description,
+	  style: this.props.product.style,
+	  price: this.props.product.price,
+	  currencyId: this.props.product.currencyId,
+	  currencyFormat: this.props.product.currencyFormat,
+	  isFreeShipping: this.props.product.isFreeShipping,
+	  size: this.props.size,
+	  quantity:1
+    });
+  }
+  render() {
+    if (this.props.inStock) {
+      return (
+ 	    <span className="in-stock"
+	      onClick={() => this.handleAddToCart()}
+	    >{this.props.size}</span>
+	  );
+    }
+    else {
+      return (
+        <span>{this.props.size}</span>
+      );
+    }
+  }
+}
+
 class Item extends React.Component {
   constructor(props) {
     super(props);
@@ -25,20 +61,51 @@ class Item extends React.Component {
             <span className="smallnum">{(this.props.product.price % 1).toFixed(2).replace(/^0+/, '')}</span>
           </span>
           <div className="addtocart">
-            <button
-              onClick={() => this.handleAddToCart({
-                id: this.props.product.id,
-                sku: this.props.product.sku,
-                title: this.props.product.title,
-                description: this.props.product.description,
-                style: this.props.product.style,
-                price: this.props.product.price,
-                currencyId: this.props.product.currencyId,
-                currencyFormat: this.props.product.currencyFormat,
-                isFreeShipping: this.props.product.isFreeShipping,
-                quantity:1
-              })}
-            >Add To Cart</button>
+            <div>
+            Click a size to add to cart<br />
+            <AddButton
+              size="XS"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            <AddButton
+              size="S"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            <AddButton
+              size="M"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            <AddButton
+              size="ML"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            <AddButton
+              size="L"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={false}
+            />
+            <AddButton
+              size="XL"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            <AddButton
+              size="XXL"
+              product={this.props.product}
+              onAddToCart={this.handleAddToCart}
+              inStock={true}
+            />
+            </div>
           </div>
         </div>
       </div>
@@ -80,7 +147,7 @@ class ShoppingCartApp extends React.Component {
     let tempCart = this.state.shoppingCart;
     let newItem = true;
     for (let i = 0; i < tempCart.length; i++) {
-      if (item.id === tempCart[i].id) {
+      if (item.id === tempCart[i].id && tempCart[i].size === item.size) {
         newItem = false;
         tempCart[i].quantity++;
         this.setState({
@@ -97,8 +164,8 @@ class ShoppingCartApp extends React.Component {
   };
   handleRemoveFromCart(item) {
     let tempCart = this.state.shoppingCart;
-    for (let i = 0; i < tempCart.length; i++) {
-      if (item.id === tempCart[i].id) {
+    for (let i = 0; i < tempCart.length; i++) { // Find item
+      if (item.id === tempCart[i].id && item.size === tempCart[i].size) {
         if (tempCart[i].quantity > 1) { // Reduce quantity
           tempCart[i].quantity--;
         }
@@ -135,7 +202,7 @@ class CartItem extends React.Component {
         <div>
           <img src={require(`./static/products/${this.props.product.sku}_1.jpg`)} alt="" />
           <div className="cart-details">
-            <h5>{this.props.product.title}</h5>
+            <h5>{this.props.product.title} ({this.props.product.size})</h5>
             <span className="cart-remove" onClick={() => {this.props.onRemoveItem(this.props.product)}}>X</span>
             <span className="cart-desc">{this.props.product.style}</span>
             <span className="cart-price">
