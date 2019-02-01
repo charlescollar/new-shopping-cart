@@ -67,43 +67,43 @@ class Item extends React.Component {
               size="XS"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("XS"))}
             />
             <AddButton
               size="S"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("S"))}
             />
             <AddButton
               size="M"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("M"))}
             />
             <AddButton
               size="ML"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("ML"))}
             />
             <AddButton
               size="L"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={false}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("L"))}
             />
             <AddButton
               size="XL"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("XL"))}
             />
             <AddButton
               size="XXL"
               product={this.props.product}
               onAddToCart={this.handleAddToCart}
-              inStock={true}
+              inStock={(-1 != this.props.product.availableSizes.indexOf("XXL"))}
             />
             </div>
           </div>
