@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import data from './static/data/products.json';
+import firebase from 'firebase';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyAmSOyurQNyIW6gmfHDbUHMzqwD2U72viU",
+  authDomain: "charlie-shopping-cart.firebaseapp.com"
+})
 
 class AddButton extends React.Component {
   constructor(props) {
@@ -207,6 +214,16 @@ class ShoppingCartApp extends React.Component {
     this.handleRemoveFromCart = this.handleRemoveFromCart.bind(this);
     this.handleFilterSize = this.handleFilterSize.bind(this);
   }
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      signInSuccess: () => false
+    }
+  }
   handleAddToCart(item) {
     let tempState = this.state;
     let newItem = true;
@@ -264,9 +281,22 @@ class ShoppingCartApp extends React.Component {
     }
     this.setState(tempState);
   }
+  componentDidMount = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({ isSignedIn: !!user })
+      console.log("user", user)
+    })
+  }
   render() {
+    let includeLogin = this.state.isSignedIn? null : (<div className="login">
+          <StyledFirebaseAuth
+            uiConfig={this.uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        </div>);
     return (
       <div className="container">
+        {includeLogin}
         <Filters 
           onFilterSize={this.handleFilterSize}
           selectedSizes={this.state.showingSizes}

@@ -153,6 +153,12 @@ body {
     width:400px;
     right:-400px;
   }
+  .login {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:2;
+  }
 }
 @media only screen and (min-width:750px) and (max-width:1000px) {
   .item {
