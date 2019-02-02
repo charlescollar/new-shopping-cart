@@ -5,9 +5,10 @@ import * as serviceWorker from './serviceWorker';
 import data from './static/data/products.json';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import apiKey from './apiKey.txt';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyAmSOyurQNyIW6gmfHDbUHMzqwD2U72viU",
+  apiKey: apiKey,
   authDomain: "charlie-shopping-cart.firebaseapp.com"
 })
 
